@@ -1,0 +1,13 @@
+.s-container {
+    margin: 20px 5%;
+}
+
+.s-product, .s-login {
+    padding: 1%;
+    background-color: whitesmoke;
+}
+
+.product-price {
+    font-size: 30px;
+    font-weight: bolder;
+}
