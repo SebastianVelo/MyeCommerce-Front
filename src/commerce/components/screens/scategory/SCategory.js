@@ -10,8 +10,10 @@ import Entity from "../../../../models/Entity";
 import Title from "../../../../util/title/Title";
 import ProgressBar from "../../../../util/progressbar/ProgressBar";
 import CardGrid from "../../util/cardgrid/CardGrid";
+import Paginator from "../../util/paginator/Paginator";
 /* CSS */
 import '../Screens.css';
+import Link from "../../../../consts/link/Link";
 
 class SCategory extends Component {
   constructor(props) {
@@ -20,8 +22,41 @@ class SCategory extends Component {
       inProcess: true,
       error: null,
       category: null,
-      products: null
+      products: null,
+      paginator: {
+        active: 0,
+        perPage: 8
+      }
     }
+  }
+
+  CategoryList() {
+    return (
+      <div className="collection with-header">
+        <div className="collection-header"><h4>Categorias</h4></div>
+        {this.props.categories.map(category => 
+          <p className={"collection-item hoverable " + (category.id === this.state.category.id ? this.props.style.secondary : "")} key={category.id}>
+            {Link.CATEGORY(this, category)}
+          </p>)
+        }
+      </div>
+    );
+  }
+
+  changePage(page) {
+    let state = this.state;
+    state.paginator.active = page;
+    this.setState({ state });
+  }
+
+  paginatedProducts() {
+    let start = this.state.paginator.active * this.state.paginator.perPage;
+    let end = start + this.state.paginator.perPage;
+    return this.state.products.slice(start, end);
+  }
+
+  totalPages() {
+    return Math.ceil(this.state.products.length / this.state.paginator.perPage);
   }
 
   async fetchData() {
@@ -69,9 +104,15 @@ class SCategory extends Component {
     if (this.state.error)
       return JSON.stringify(this.state.error); //TODO hacer un componente que muestre un error
     return (
-      <div className="s-container">
-        <Title label={this.state.category.name} />
-        <CardGrid products={this.state.products} buttonColor={this.props.style.secondary} action={this.props.addToCart} add={true} />
+      <div className="s-container row">
+        <div className="col s12 m12 l3 xl3">
+          {this.CategoryList()}
+        </div>
+        <div className="col s12 m12 l9 xl9 s-login hoverable">
+          <Title label={this.state.category.name} />
+          <CardGrid products={this.paginatedProducts()} buttonColor={this.props.style.secondary} action={this.props.addToCart} add={true} />
+          <Paginator totalPages={this.totalPages()} activePage={this.state.paginator.active} changePage={this.changePage.bind(this)} />
+        </div>
       </div>
     );
   }

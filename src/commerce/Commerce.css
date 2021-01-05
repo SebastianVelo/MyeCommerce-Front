@@ -1,0 +1,13 @@
+#icon {
+    font-size: 30px;
+    margin: 0px 20px;
+    color: white;
+}
+
+.nav-wrapper {
+    font-weight: bolder;
+}
+
+a {
+    color: inherit !important;
+}

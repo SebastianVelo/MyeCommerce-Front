@@ -15,6 +15,10 @@ class UserRequest {
     static deleteById = async (id) => {
         return IRequest.deleteById(Request.USER, id);
     }
+
+    static insert = async (user) => {
+        return IRequest.insert(Request.USER, user);
+    }
 }
 
 export default UserRequest;

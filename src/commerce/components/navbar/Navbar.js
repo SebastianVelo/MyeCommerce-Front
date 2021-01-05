@@ -42,8 +42,8 @@ function NotLogged(props) {
 function Logged(props) {
     return (
         <ul id="nav-mobile" className="right hide-on-med-and-down">
-        <li>{Link.CART(props.t)}</li>
-        <li>{Link.ACCOUNT(props.t)}</li>
+            <li>{Link.CART(props.t, props.t.props.cart.purchases.length, props.t.props.style.background)}</li>
+            <li>{Link.ACCOUNT(props.t)}</li>
         </ul>
     );
 }

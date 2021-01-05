@@ -10,20 +10,14 @@ class Carousel extends Component {
     }
 
     componentDidMount() {
-        M.Carousel.init(document.querySelectorAll('.carousel'));
+        M.Carousel.init(document.querySelectorAll('#'+this.props.id), this.props.cfg);
+        M.Materialbox.init(document.querySelectorAll('.materialboxed'));
     }
 
     render() {
         return (
-            <div className="carousel">
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
-                <img className="carousel-item" src={"https://picsum.photos/400?random="+(Math.floor(Math.random() * (50 - 1)) + 1)} />
+            <div id={this.props.id} className={"carousel center " + (this.props.slider ? "carousel-slider" : "")}>
+                {this.props.elements.map((e, index) => <div key={index} className="carousel-item">{e}</div>)}
             </div>
         );
     }

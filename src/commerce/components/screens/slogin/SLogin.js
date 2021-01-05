@@ -7,48 +7,42 @@ import Link from "../../../../consts/link/Link";
 import PathLink from "../../../../consts/path/PathLink";
 /* Requests */
 import UserRequest from  "../../../../requests/UserRequest";
-/* Utils */
-import FormLogin from "../../../../util/form/formlogin/FormLogin";
-import FormValidator from "../../../../util/form/formvalidator/FormValidator";
+/* DTO */
+import UserDTO from "../../../../dto/UserDTO";
 /* Components */
 import Title from "../../../../util/title/Title";
-import Input from "../../../../util/form/input/Input";
 import Button from "../../../../util/button/Button";
+import UserForm from "../../../../form/UserForm";
 
 class SLogin extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    FormLogin().forEach(input => this.state[input.id] = "");
+    this.state = { 
+      userDTO: new UserDTO()
+    };
   }
 
   async login() {
-    let response = await UserRequest.check(this.state.user, this.state.password);
+    let response = await UserRequest.check(this.state.userDTO.username, this.state.userDTO.password);
     this.props.login(response);
-  }
-
-  isValidForm() {
-    return FormValidator.isValidUser(this.state.user) && FormValidator.isValidPassword(this.state.password);
   }
 
   synch(key, value) {
     let state = this.state;
-    state[key] = value;
+    state.userDTO[key] = value;
     this.setState(state);
   }
-
   render() {
     if (this.props.user) {
       return <Redirect to={PathLink.ACCOUNT(this)} />
     }
-    let form = FormLogin(this.synch.bind(this));
     return (
       <div className="s-container s-login">
         <div className="row">
           <p className="flow-text right">¿No tenés cuenta? {Link.SINGIN(this)}</p> <br/>
           <Title label="Iniciar sesión" />
-          {form.map(input => <Input key={input.id} id={input.id} label={input.label} action={input.action} type={input.type} />)  }
-          <Button label="Ingresar" action={() => this.login.bind(this)} color={this.props.style.secondary} disabled={!this.isValidForm()} />
+          {UserForm.login(this.synch.bind(this))}
+          <Button label="Ingresar" action={() => this.login.bind(this)} color={this.props.style.secondary} disabled={!this.state.userDTO.isValidLogin()} />
         </div>
       </div>
     );

@@ -7,6 +7,7 @@ import PathLink from "../../../../consts/path/PathLink";
 /* Components */
 import Title from "../../../../util/title/Title";
 import Button from "../../../../util/button/Button";
+import Table from "../../../../util/table/Table";
 
 class SAccount extends Component {
   constructor(props) {
@@ -28,7 +29,8 @@ class SAccount extends Component {
       <div className="s-container s-login">
         <div className="row">
           <Title label="Mi cuenta" />
-          
+          <Table rows={this.props.user} />
+          <br/>
           <Button label="Cerrar sesión" action={() => this.props.logoff} color={this.props.style.secondary} />
         </div>
       </div>

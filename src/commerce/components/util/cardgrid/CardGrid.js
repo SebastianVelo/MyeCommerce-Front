@@ -3,24 +3,12 @@ import Card from "./card/Card";
 function CardGrid(props) {
     return (
         <div className="row">
-            {props.products.map(product => <Card key={product.id} product={product} cfg={props.add ? Add(props) : Remove(props) } />)}
+            {props.products.map((product, index) =>
+                <div key={index} className="col s6 m6 l3 xl3">
+                    <Card key={product.id} product={product} {...props} />
+                </div>)
+            }
         </div>
     );
 }
 export default CardGrid;
-
-const Add = (props) => {
-    return {
-        buttonColor: props.buttonColor,
-        action: props.action,
-        label: "Añadir al carrito"
-    }
-}
-
-const Remove = (props) => {
-    return {
-        buttonColor: "red accent-3",
-        action: props.action,
-        label: "Quitar del carrito"
-    }
-}
