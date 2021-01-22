@@ -26,7 +26,7 @@ class SAccount extends Component {
       return <Redirect to={PathLink.LOGIN(this)} />
     }
     return (
-      <div className="s-container s-login">
+      <div className="s-container s-wrapper">
         <div className="row">
           <Title label="Mi cuenta" />
           <Table rows={this.props.user} />

@@ -20,7 +20,7 @@ function Pages(props) {
 }
 
 function Page(props) {
-  let className = props.activePage === props.page ? "active black" : "white";
+  let className = props.activePage === props.page ? "active black white-text" : "white";
   return (
     <li className={className}>
       <a onClick={(ev) => props.changePage(props.page)}>{props.page + 1}</a>

@@ -37,7 +37,7 @@ class SLogin extends Component {
       return <Redirect to={PathLink.ACCOUNT(this)} />
     }
     return (
-      <div className="s-container s-login">
+      <div className="s-container s-wrapper">
         <div className="row">
           <p className="flow-text right">¿No tenés cuenta? {Link.SINGIN(this)}</p> <br/>
           <Title label="Iniciar sesión" />

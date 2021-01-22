@@ -28,17 +28,17 @@ class SCart extends Component {
   render() {
     if (this.props.cart.purchases.length === 0) {
       return (
-        <div className="s-container s-login">
+        <div className="s-container s-wrapper">
           <Title label={"Mi carrito"} />
-          <b>No hay productos en tu carrito. {Link.CONTINUE(this)}</b>
+          <b>No hay productos en tu carrito. <p className="blue-text">{Link.CONTINUE(this)}</p></b>
         </div>
       );
     }
     return (
-      <div className="s-container s-login">
+      <div className="s-container s-wrapper">
         <Title label={"Mi carrito"} />
         <CardGrid products={this.props.cart.purchases} action={this.props.removeToCart} add={false} />
-        {Object.keys(this.total()).map(currency => <p className="flow-text">Total: {currency}{this.total()[currency]}</p>)}
+        {Object.keys(this.total()).map(currency => <p key={currency} className="flow-text">Total: {currency}{this.total()[currency]}</p>)}
         <Button label={Link.CARTDETAIL(this)} action={() => {} } color={this.props.style.secondary} />
       </div>
     );

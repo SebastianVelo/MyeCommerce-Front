@@ -2,8 +2,8 @@
     margin: 20px 5%;
 }
 
-.s-product, .s-login {
-    padding: 1%;
+.s-product, .s-wrapper {
+    padding: 2%;
     background-color: whitesmoke;
 }
 

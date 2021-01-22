@@ -59,9 +59,8 @@ class SProduct extends Component {
           <div className="col s12 l8">
             <Title label={this.state.product.name} />
             <div className="divider"></div>
-            <center>
-              <Carousel elements={this.state.product.imgs.map(img => <img className="materialboxed" src={img.url} alt={this.state.product.name} />)} cfg={{}} id="sproduct"  />
-            </center>
+            <Carousel elements={this.state.product.imgs.map(img => <img className="materialboxed" src={img.url} alt={this.state.product.name} />)} cfg={{}} id="sproduct" slider={true} />
+            <br/>
           </div>
           <div className="col s12 l4">
             <Button label="Añadir al carrito" action={() => this.addToCart.bind(this)} color={this.props.style.secondary} disabled={this.state.product.stock === 0} />

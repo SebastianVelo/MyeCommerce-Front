@@ -32,8 +32,8 @@ class SCategory extends Component {
 
   CategoryList() {
     return (
-      <div className="collection with-header">
-        <div className="collection-header"><h4>Categorias</h4></div>
+      <div className="collection with-header hide-on-med-and-down">
+        <div className="collection-header"><h3>Categorias</h3></div>
         {this.props.categories.map(category => 
           <p className={"collection-item hoverable " + (category.id === this.state.category.id ? this.props.style.secondary : "")} key={category.id}>
             {Link.CATEGORY(this, category)}
@@ -108,7 +108,7 @@ class SCategory extends Component {
         <div className="col s12 m12 l3 xl3">
           {this.CategoryList()}
         </div>
-        <div className="col s12 m12 l9 xl9 s-login hoverable">
+        <div className="col s12 m12 l9 xl9 s-wrapper hoverable">
           <Title label={this.state.category.name} />
           <CardGrid products={this.paginatedProducts()} buttonColor={this.props.style.secondary} action={this.props.addToCart} add={true} />
           <Paginator totalPages={this.totalPages()} activePage={this.state.paginator.active} changePage={this.changePage.bind(this)} />

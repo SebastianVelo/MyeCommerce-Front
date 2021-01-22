@@ -72,7 +72,7 @@ class FeaturedProducts extends Component {
     return (
       <div className="s-container ">
         <Title label={"Destacados"} />
-        <div className="s-login">
+        <div className="s-wrapper">
           {this.componentToShow()}
         </div>
       </div>

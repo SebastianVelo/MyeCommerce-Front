@@ -41,7 +41,7 @@ class SSingin extends Component {
     }
     console.log(this.state.userDTO);
     return (
-      <div className="s-container s-login">
+      <div className="s-container s-wrapper">
         <div className="row">
           <p className="flow-text right">¿Ya tenés cuenta? {Link.LOGIN(this)}</p> <br/>
           <Title label="Registrate" />

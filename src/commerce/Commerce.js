@@ -9,6 +9,7 @@ import CommerceRequest from "../requests/CommerceRequest";
 import CategoryRequest from "../requests/CategoryRequest";
 /* Models */
 import Entity from "../models/Entity";
+import Cart from "../models/Cart";
 /* Components */
 import Header from "./components/header/Header";
 import Navbar from "./components/navbar/Navbar";
@@ -23,11 +24,11 @@ import SAccount from "./components/screens/saccount/SAccount";
 import SCart from "./components/screens/scart/SCart";
 import SCategory from "./components/screens/scategory/SCategory";
 import SProduct from "./components/screens/sproduct/SProduct";
+import SCartDetail from "./components/screens/scartdetail/SCartDetail";
+import FeaturedProducts from "./components/util/featuredproducts/FeaturedProducts";
 /* CSS */
 import './Commerce.css';
 import './components/screens/Screens.css';
-import FeaturedProducts from "./components/util/featuredproducts/FeaturedProducts";
-import SCartDetail from "./components/screens/scartdetail/SCartDetail";
 
 class Commerce extends Component {
   constructor(props) {
@@ -38,11 +39,7 @@ class Commerce extends Component {
       commerce: null,
       categories: null,
       user: null,
-      cart: {
-        idCommerce: 0,
-        idUser: 0,
-        purchases: []
-      }
+      cart: new Cart(),
     }
   }
 
@@ -50,12 +47,12 @@ class Commerce extends Component {
   async fetchData() {
     let path = this.props.match.params.path;
     await this.setCommerce(path);
-    if(this.state.commerce) {
+    if (this.state.commerce) {
       await this.setCategories();
     }
-    this.setState({inProcess: false});
+    this.setState({ inProcess: false });
   }
-  
+
   async setCommerce(path) {
     let state = this.state;
     let response = await CommerceRequest.getByPath(path);
@@ -89,7 +86,7 @@ class Commerce extends Component {
     let state = this.state;
     if (response.isOk()) {
       state.user = new Entity(response.data);
-      state.cart.idUser = state.user.id;
+      state.cart.setIdUser(state.user.id);
     }
     else {
       state.error = response;
@@ -107,48 +104,53 @@ class Commerce extends Component {
   /* Cart */
   addToCart(product) {
     let cart = this.state.cart;
-    product = new Entity(product);
-    product.hashId = Date.now();
-    cart.purchases.push(product);
-    if(!cart.idCommerce)
-      cart.idCommerce = this.state.commerce.id;
-    this.setState({cart});
+    cart.add(product);
+    if (!cart.idCommerce)
+      cart.setIdCommerce(this.state.commerce.id);
+    this.setState({ cart });
   }
 
   removeToCart(product) {
-    let state = this.state;
-    state.cart.purchases = state.cart.purchases.filter(p => p.hashId !== product.hashId);
-    this.setState({ state });
+    let cart = this.state.cart;
+    cart.remove(product.hashId);
+    this.setState({ cart });
   }
 
+  emptyCart() {
+    let cart = this.state.cart;
+    cart.empty();
+    this.setState({ cart });
+  }
+
+  /* React functs */
   async componentDidMount() {
-    if(!this.state.commerce) {
+    if (!this.state.commerce) {
       await this.fetchData();
     }
   }
 
   render() {
     if (this.state.inProcess)
-      return <ProgressBar />; 
+      return <ProgressBar />;
     if (this.state.error)
       return JSON.stringify(this.state.error); //TODO hacer un componente que muestre un error
     return (
       <div>
-        <Header    style={this.state.commerce.style} commerce={this.state.commerce} />
-        <Navbar    style={this.state.commerce.style} user={this.state.user} categories={this.state.categories} cart={this.state.cart}/>
+        <Header style={this.state.commerce.style} commerce={this.state.commerce} />
+        <Navbar style={this.state.commerce.style} user={this.state.user} categories={this.state.categories} cart={this.state.cart} />
         <Searchbar style={this.state.commerce.style} />
 
-        <Route     exact path={PathRoute.COMMERCE()}   component={() => <SHome        style={this.state.commerce.style} addToCart={this.addToCart.bind(this)} commerce={this.state.commerce}  /> } />
-        <Route     exact path={PathRoute.CATEGORY()}   component={() => <SCategory    style={this.state.commerce.style} addToCart={this.addToCart.bind(this)} categories={this.state.categories} /> } />
-        <Route     exact path={PathRoute.PRODUCT()}    component={() => <SProduct     style={this.state.commerce.style} addToCart={this.addToCart.bind(this)} /> } />
-        <Route     exact path={PathRoute.LOGIN()}      component={() => <SLogin       style={this.state.commerce.style} user={this.state.user} login={this.login.bind(this)} /> } />
-        <Route     exact path={PathRoute.SINGIN()}     component={() => <SSingin      style={this.state.commerce.style} user={this.state.user} login={this.login.bind(this)} /> } />
-        <Route     exact path={PathRoute.ACCOUNT()}    component={() => <SAccount     style={this.state.commerce.style} user={this.state.user} logoff={this.logoff.bind(this)} /> } />
-        <Route     exact path={PathRoute.CART()}       component={() => <SCart        style={this.state.commerce.style} removeToCart={this.removeToCart.bind(this)} cart={this.state.cart}  /> } />
-        <Route     exact path={PathRoute.CARTDETAIL()} component={() => <SCartDetail  style={this.state.commerce.style} removeToCart={this.removeToCart.bind(this)} cart={this.state.cart}  /> } />
-        
+        <Route exact path={PathRoute.COMMERCE()} component={() => <SHome style={this.state.commerce.style} addToCart={this.addToCart.bind(this)} commerce={this.state.commerce} />} />
+        <Route exact path={PathRoute.CATEGORY()} component={() => <SCategory style={this.state.commerce.style} addToCart={this.addToCart.bind(this)} categories={this.state.categories} />} />
+        <Route exact path={PathRoute.PRODUCT()} component={() => <SProduct style={this.state.commerce.style} addToCart={this.addToCart.bind(this)} />} />
+        <Route exact path={PathRoute.LOGIN()} component={() => <SLogin style={this.state.commerce.style} user={this.state.user} login={this.login.bind(this)} />} />
+        <Route exact path={PathRoute.SINGIN()} component={() => <SSingin style={this.state.commerce.style} user={this.state.user} login={this.login.bind(this)} />} />
+        <Route exact path={PathRoute.ACCOUNT()} component={() => <SAccount style={this.state.commerce.style} user={this.state.user} logoff={this.logoff.bind(this)} />} />
+        <Route exact path={PathRoute.CART()} component={() => <SCart style={this.state.commerce.style} removeToCart={this.removeToCart.bind(this)} cart={this.state.cart} />} />
+        <Route exact path={PathRoute.CARTDETAIL()} component={() => <SCartDetail style={this.state.commerce.style} emptyCart={this.emptyCart.bind(this)} cart={this.state.cart} />} />
+
         <FeaturedProducts carousel={true} style={this.state.commerce.style} addToCart={this.addToCart.bind(this)} commerce={this.state.commerce} />
-        <Footer    style={this.state.commerce.style} commerce={this.state.commerce} />
+        <Footer style={this.state.commerce.style} commerce={this.state.commerce} />
       </div>
     );
   }
